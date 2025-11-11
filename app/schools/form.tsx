@@ -1,4 +1,4 @@
-import { Box, Button, ButtonText, FormControl, FormControlLabel, FormControlLabelText, Heading, Input, InputField, VStack } from '@gluestack-ui/themed';
+import { Box, Button, ButtonText, FormControl, FormControlLabel, FormControlLabelText, Heading, Input, InputField, Spinner, VStack } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
@@ -9,6 +9,7 @@ export default function SchoolFormScreen() {
   const { schools, addSchool, updateSchool } = useStore();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -27,6 +28,7 @@ export default function SchoolFormScreen() {
     }
 
     try {
+      setSaving(true);
       if (id) {
         const response = await fetch(`/api/schools/${id}`, {
           method: 'PUT',
@@ -52,6 +54,8 @@ export default function SchoolFormScreen() {
     } catch (error) {
       console.error('Erro ao salvar escola:', error);
       Alert.alert('Erro', 'Não foi possível salvar a escola');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -93,10 +97,14 @@ export default function SchoolFormScreen() {
             </Input>
           </FormControl>
 
-          <Button bg="$blue600" size="lg" onPress={handleSave}>
-            <ButtonText fontSize="$md" fontWeight="$bold">
-              Salvar
-            </ButtonText>
+          <Button bg="$blue600" size="lg" onPress={handleSave} isDisabled={saving}>
+            {saving ? (
+              <Spinner color="$white" />
+            ) : (
+              <ButtonText fontSize="$md" fontWeight="$bold">
+                Salvar
+              </ButtonText>
+            )}
           </Button>
 
           <Button 

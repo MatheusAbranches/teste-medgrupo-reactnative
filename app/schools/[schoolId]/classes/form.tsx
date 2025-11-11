@@ -1,4 +1,4 @@
-import { Box, Button, ButtonText, FormControl, FormControlLabel, FormControlLabelText, HStack, Heading, Input, InputField, VStack } from '@gluestack-ui/themed';
+import { Box, Button, ButtonText, FormControl, FormControlLabel, FormControlLabelText, HStack, Heading, Input, InputField, Spinner, VStack } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
@@ -12,6 +12,7 @@ export default function ClassFormScreen() {
   const [name, setName] = useState('');
   const [shift, setShift] = useState<'Manhã' | 'Tarde' | 'Noite'>('Manhã');
   const [year, setYear] = useState('2025');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -31,6 +32,7 @@ export default function ClassFormScreen() {
     }
 
     try {
+      setSaving(true);
       if (id) {
         const response = await fetch(`/api/classes/${id}`, {
           method: 'PUT',
@@ -58,6 +60,8 @@ export default function ClassFormScreen() {
     } catch (error) {
       console.error('Erro ao salvar turma:', error);
       Alert.alert('Erro', 'Não foi possível salvar a turma');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -128,10 +132,14 @@ export default function ClassFormScreen() {
             </Input>
           </FormControl>
 
-          <Button bg="$blue600" size="lg" onPress={handleSave}>
-            <ButtonText fontSize="$md" fontWeight="$bold">
-              Salvar
-            </ButtonText>
+          <Button bg="$blue600" size="lg" onPress={handleSave} isDisabled={saving}>
+            {saving ? (
+              <Spinner color="$white" />
+            ) : (
+              <ButtonText fontSize="$md" fontWeight="$bold">
+                Salvar
+              </ButtonText>
+            )}
           </Button>
 
           <Button 

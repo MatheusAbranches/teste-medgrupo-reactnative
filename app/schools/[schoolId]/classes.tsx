@@ -1,4 +1,4 @@
-import { Box, Button, ButtonText, HStack, Heading, Text, VStack } from '@gluestack-ui/themed';
+import { Box, Button, ButtonText, HStack, Heading, Spinner, Text, VStack } from '@gluestack-ui/themed';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList } from 'react-native';
@@ -10,6 +10,7 @@ export default function ClassesScreen() {
   const { schools, classes, setClasses, deleteClass } = useStore();
   const [school, setSchool] = useState<School | null>(null);
   const [schoolClasses, setSchoolClasses] = useState<Class[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const foundSchool = schools.find((s) => s.id === schoolId);
@@ -24,11 +25,14 @@ export default function ClassesScreen() {
 
   const loadClasses = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`/api/classes?schoolId=${schoolId}`);
       const data = await response.json();
       setClasses(data.classes);
     } catch (error) {
       console.error('Erro ao carregar turmas:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,7 +118,14 @@ export default function ClassesScreen() {
           </Button>
         </VStack>
       </Box>
-      {schoolClasses.length === 0 ? (
+      {loading ? (
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <Spinner size="large" color="$blue600" />
+          <Text mt="$4" fontSize="$md" color="$coolGray600">
+            Carregando turmas...
+          </Text>
+        </Box>
+      ) : schoolClasses.length === 0 ? (
         <Box flex={1} justifyContent="center" alignItems="center">
           <Text fontSize="$md" color="$coolGray400">
             Nenhuma turma cadastrada

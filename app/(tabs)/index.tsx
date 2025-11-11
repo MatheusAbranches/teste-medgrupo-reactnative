@@ -6,6 +6,7 @@ import {
   Heading,
   Input,
   InputField,
+  Spinner,
   Text,
   VStack,
 } from "@gluestack-ui/themed";
@@ -19,6 +20,7 @@ export default function SchoolsScreen() {
   const { schools, setSchools, deleteSchool, classes, setClasses } = useStore();
   const [searchText, setSearchText] = useState("");
   const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadSchools();
@@ -40,11 +42,14 @@ export default function SchoolsScreen() {
 
   const loadSchools = async () => {
     try {
+      setLoading(true);
       const response = await fetch("/api/schools");
       const data = await response.json();
       setSchools(data.schools);
     } catch (error) {
       console.error("Erro ao carregar escolas:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,12 +166,21 @@ export default function SchoolsScreen() {
           </Button>
         </VStack>
       </Box>
-      <FlatList
-        data={filteredSchools}
-        renderItem={renderSchool}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
-      />
+      {loading ? (
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <Spinner size="large" color="$blue600" />
+          <Text mt="$4" fontSize="$md" color="$coolGray600">
+            Carregando escolas...
+          </Text>
+        </Box>
+      ) : (
+        <FlatList
+          data={filteredSchools}
+          renderItem={renderSchool}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      )}
     </Box>
   );
 }
