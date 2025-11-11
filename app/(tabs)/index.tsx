@@ -10,8 +10,8 @@ import {
   Text,
   VStack,
 } from "@gluestack-ui/themed";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import { useStore } from "../../store/useStore";
 import { School } from "../../types";
@@ -21,11 +21,6 @@ export default function SchoolsScreen() {
   const [searchText, setSearchText] = useState("");
   const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    loadSchools();
-    loadClasses();
-  }, []);
 
   useEffect(() => {
     if (searchText) {
@@ -38,7 +33,7 @@ export default function SchoolsScreen() {
     } else {
       setFilteredSchools(schools);
     }
-  }, [searchText, schools]);
+  }, [searchText, schools, classes]);
 
   const loadSchools = async () => {
     try {
@@ -138,6 +133,13 @@ export default function SchoolsScreen() {
         </HStack>
       </VStack>
     </Box>
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      loadSchools();
+      loadClasses();
+    }, [])
   );
 
   return (

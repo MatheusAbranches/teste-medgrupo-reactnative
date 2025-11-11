@@ -14,8 +14,7 @@ export function makeServer(): Server {
       server.create('school', { id: '4', name: 'Colégio Estadual Dom Pedro II', address: 'Av. Brasil, 1010' });
       server.create('school', { id: '5', name: 'Escola Municipal Ana Costa', address: 'Rua São José, 250' });
       server.create('school', { id: '6', name: 'Escola Estadual Santos Dumont', address: 'Av. Independência, 567' });
-      server.create('school', { id: '7', name: 'Escola Municipal Vila Nova', address: 'Rua das Acácias, 88' });
-      server.create('school', { id: '8', name: 'Colégio Estadual Tiradentes', address: 'Av. Central, 333' });
+    
 
       server.create('class', { id: '1', schoolId: '1', name: '5º Ano A', shift: 'Manhã', year: '2025' });
       server.create('class', { id: '2', schoolId: '1', name: '6º Ano B', shift: 'Tarde', year: '2025' });
@@ -25,8 +24,18 @@ export function makeServer(): Server {
       server.create('class', { id: '6', schoolId: '4', name: '1º Ano A', shift: 'Manhã', year: '2025' });
       server.create('class', { id: '7', schoolId: '5', name: '2º Ano B', shift: 'Tarde', year: '2025' });
       server.create('class', { id: '8', schoolId: '6', name: '3º Ano A', shift: 'Manhã', year: '2025' });
-      server.create('class', { id: '9', schoolId: '7', name: '4º Ano B', shift: 'Tarde', year: '2025' });
-      server.create('class', { id: '10', schoolId: '8', name: '5º Ano C', shift: 'Noite', year: '2025' });
+      server.create('class', { id: '9', schoolId: '4', name: '4º Ano B', shift: 'Tarde', year: '2025' });
+      server.create('class', { id: '10', schoolId: '5', name: '7º Ano C', shift: 'Noite', year: '2025' });
+      server.create('class', { id: '11', schoolId: '1', name: '8º Ano A', shift: 'Manhã', year: '2025' });
+      server.create('class', { id: '12', schoolId: '1', name: '9º Ano B', shift: 'Tarde', year: '2025' });
+      server.create('class', { id: '13', schoolId: '2', name: '5º Ano A', shift: 'Manhã', year: '2025' });
+      server.create('class', { id: '14', schoolId: '3', name: '3º Ano C', shift: 'Noite', year: '2025' });
+      server.create('class', { id: '15', schoolId: '3', name: '5º Ano A', shift: 'Tarde', year: '2025' });
+      server.create('class', { id: '16', schoolId: '4', name: '6º Ano A', shift: 'Manhã', year: '2025' });
+      server.create('class', { id: '17', schoolId: '5', name: '8º Ano B', shift: 'Tarde', year: '2025' });
+      server.create('class', { id: '18', schoolId: '6', name: '7º Ano A', shift: 'Manhã', year: '2025' });
+      server.create('class', { id: '19', schoolId: '6', name: '4º Ano B', shift: 'Tarde', year: '2025' });
+      server.create('class', { id: '20', schoolId: '5', name: '5º Ano C', shift: 'Noite', year: '2025' });
     },
 
     routes() {
