@@ -18,7 +18,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="AboutScreen"
         options={{
           title: 'Sobre',
           tabBarIcon: ({ color }) => <FontAwesome size={24} name="info-circle" color={color} />,

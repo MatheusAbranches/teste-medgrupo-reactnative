@@ -11,7 +11,7 @@ import 'react-native-reanimated';
 import { makeServer } from '../services/mockServer';
 
 export {
-    ErrorBoundary
+  ErrorBoundary
 } from 'expo-router';
 
 export const unstable_settings = {

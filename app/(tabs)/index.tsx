@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   ButtonText,
-  HStack,
   Heading,
   Input,
   InputField,
@@ -13,6 +12,7 @@ import {
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
+import SchoolCard from "../../components/SchoolCard";
 import { useStore } from "../../store/useStore";
 import { School } from "../../types";
 
@@ -21,19 +21,6 @@ export default function SchoolsScreen() {
   const [searchText, setSearchText] = useState("");
   const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (searchText) {
-      const filtered = schools.filter(
-        (school) =>
-          school.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          school.address.toLowerCase().includes(searchText.toLowerCase())
-      );
-      setFilteredSchools(filtered);
-    } else {
-      setFilteredSchools(schools);
-    }
-  }, [searchText, schools, classes]);
 
   const loadSchools = async () => {
     try {
@@ -81,59 +68,25 @@ export default function SchoolsScreen() {
   };
 
   const renderSchool = ({ item }: { item: School }) => (
-    <Box
-      bg="$white"
-      borderRadius="$xl"
-      p="$4"
-      mb="$3"
-      shadowColor="$black"
-      shadowOffset={{ width: 0, height: 2 }}
-      shadowOpacity={0.1}
-      shadowRadius={8}
-      elevation={3}
-    >
-      <VStack space="md">
-        <Box>
-          <Text fontSize="$lg" fontWeight="$bold" color="$coolGray800" mb="$1">
-            {item.name}
-          </Text>
-          <Text fontSize="$sm" color="$coolGray600" mb="$1">
-            {item.address}
-          </Text>
-          <Text fontSize="$xs" color="$blue600" fontWeight="$semibold">
-            📚 {getClassCount(item.id)}{" "}
-            {getClassCount(item.id) === 1 ? "turma" : "turmas"}
-          </Text>
-        </Box>
-        <HStack space="xs">
-          <Button
-            flex={1}
-            bg="$blue600"
-            onPress={() => router.push(`/schools/${item.id}/classes`)}
-            size="sm"
-          >
-            <ButtonText>Ver Turmas</ButtonText>
-          </Button>
-          <Button
-            flex={1}
-            bg="$green600"
-            onPress={() => router.push(`/schools/form?id=${item.id}`)}
-            size="sm"
-          >
-            <ButtonText>Editar</ButtonText>
-          </Button>
-          <Button
-            flex={1}
-            bg="$red600"
-            onPress={() => handleDelete(item)}
-            size="sm"
-          >
-            <ButtonText>Excluir</ButtonText>
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
+    <SchoolCard
+      school={item}
+      classCount={getClassCount(item.id)}
+      onDelete={handleDelete}
+    />
   );
+
+  useEffect(() => {
+    if (searchText) {
+      const filtered = schools.filter(
+        (school) =>
+          school.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          school.address.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredSchools(filtered);
+    } else {
+      setFilteredSchools(schools);
+    }
+  }, [searchText, schools, classes]);
 
   useFocusEffect(
     useCallback(() => {
